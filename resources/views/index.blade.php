@@ -2,6 +2,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <title>Alfredo Maggi</title>
 <link rel="stylesheet" type="text/css" href="css/style.css" />
 <link href="font/stylesheet.css" rel="stylesheet">
@@ -32,22 +33,25 @@ Elecciones del Consejo de la Magistratura
 </ul>
 <div class="tab-content" id="pills-tabContent">
   <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-  
+      <form>
+        @csrf
         <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Nro. de Cédula" aria-label="Recipient's username" aria-describedby="basic-addon2">
+          <input type="text" name="ssn" id="ssn" class="form-control" placeholder="Nro. de Cédula" aria-label="Recipient's username" aria-describedby="basic-addon2">
           <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button"><img src="img/buscar.svg" class="bus"></button>
+            <button class="btn btn-outline-secondary" type="submit"><img src="img/buscar.svg" class="bus"></button>
           </div>
         </div>
-      
+      </form>
   </div>
   <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+      <form>
         <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Nro. de Matricula" aria-label="Recipient's username" aria-describedby="basic-addon2">
+          <input type="text" name="matricula" id="matricula" class="form-control" placeholder="Nro. de Matricula" aria-label="Recipient's username" aria-describedby="basic-addon2">
           <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button"><img src="img/buscar.svg" class="bus"></button>
+            <button class="btn btn-outline-secondary" type="submit"><img src="img/buscar.svg" class="bus"></button>
           </div>
         </div>
+      </form>
   </div>
  
 </div>
@@ -66,25 +70,60 @@ Elecciones del Consejo de la Magistratura
         <div class="copy">© Copyright 2020 www.alfredomaggi.com.py </div>
         <div class="follow-web">
         Seguinos: 
-        <a style="margin-left: 10px" href="#"><img src="img/fb.svg"></a>
-        <a style="margin-left: 10px" href="#"><img src="img/ig.svg"></a>
+        <a style="margin-left: 10px" href="https://www.facebook.com/AlfredoMaggipy/" target="_blank"><img src="img/fb.svg"></a>
+        <a style="margin-left: 10px" href="https://www.instagram.com/alfredomaggi/" target="_blank"><img src="img/ig.svg"></a>
             
         </div>
         
         <div class="follow-movil">
-        <a href="#"><img src="img/fb.svg"></a>
-        <a style="margin-left: 10px" href="#"><img src="img/ig.svg"></a>
+        <a href="https://www.facebook.com/AlfredoMaggipy/" target="_blank"><img src="img/fb.svg"></a>
+        <a style="margin-left: 10px" href="https://www.instagram.com/alfredomaggi/" target="_blank"><img src="img/ig.svg"></a>
             
         </div>
         
         <div class="espacio-30px"></div>
-         <div class="whatsapp"><a href="#"><img src="img/wha.svg" width="100%"></a> </div>  
+         <div class="whatsapp"><a href="https://wa.me/0981542240" target="_blank"><img src="img/wha.svg" width="100%"></a> </div>  
     </div>  
  
  
 <!-- Java Script -->
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>     
+
+<script type="text/javascript">
+
+  $('form').on('submit', function(e){
+    e.preventDefault();
+
+    var bool = false;
+    
+    let ssn = $('#ssn').val();
+    let matricula = $('#matricula').val();
+
+    var data = {
+      '_token' : document.querySelector('meta[name="csrf-token"]').content,
+      'ssn' :  ssn,
+      'matricula' : matricula
+    };
+
+    $.ajax({
+        url: '/check',
+        method: 'POST',
+        async: false,
+        dataType: 'json',
+        headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content },
+            data: data,
+            complete: function (data) {
+                if (data.responseJSON.success) {
+                            bool = true;
+                } else {
+                            bool = false;
+                }
+            }
+    });
+  
+  });
+</script>
 </body>
 </html>

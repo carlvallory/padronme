@@ -16,3 +16,21 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('index');
 });
+
+Route::resource('registros', 'RegistroController');
+
+Auth::routes(['verify' => true]);
+
+
+Route::get('/admin', 'HomeController@index');
+Route::get('/home', 'HomeController@index')->middleware('verified');
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+
+Route::get('/home', function() {
+    return view('home');
+})->name('home')->middleware('auth');
+
+Route::post('check', 'HomeController@check')->name('check');
