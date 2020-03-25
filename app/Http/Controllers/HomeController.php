@@ -29,6 +29,16 @@ class HomeController extends Controller
         return view('home');
     }
 
+    public function result()
+    {
+        return view('resultado-datos');
+    }
+
+    public function alert()
+    {
+        return view('resultado-alert');
+    }
+
     public function check(Request $request){
         //here
         if ($request->ajax()) {

@@ -27,6 +27,8 @@ Route::get('/home', 'HomeController@index')->middleware('verified');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/result', 'HomeController@result')->name('result');
+Route::get('/alert', 'HomeController@alert')->name('alert');
 
 
 Route::get('/home', function() {
